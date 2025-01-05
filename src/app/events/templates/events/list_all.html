@@ -1,0 +1,64 @@
+{% extends "events/list_base.html" %}
+{% load static %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+
+{% block content %}
+<h1>{{ title }}</h1>
+
+<table class="table table-bordered">
+    <tbody>
+        <tr>
+            <th>
+                №
+            </th>
+            <th>
+                Имя
+            </th>
+            <th>
+                Явка
+            </th>
+            <th>
+                Опл.
+            </th>
+            <th>
+                Шлем
+            </th>
+            <th>
+                Кат.
+            </th>   
+            <th>
+                Результат
+            </th>
+        </tr>
+        {% for x in applications %}
+            <tr>
+                <td>
+                    {{ x.number }}
+                </td>
+                <td>
+                    {{ x.user_profile }}
+                </td>
+                <td>
+                    
+                </td>
+                <td>
+                    {% if not x.payment_confirmed %}н/о{% endif %}
+                </td>
+                <td>
+                    {% if not x.helmet_not_needed %}шлем{% endif %}
+                </td>
+                <td>
+                    {{ x.render_category }}
+                </td>
+                <td>
+
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,39 @@
+<!doctype html>
+{% load static %}
+<html lang="ru">
+    <head>
+        <meta charset="utf-8">
+        
+        <meta name="viewport" content="minimal-ui, width=device-width, shrink-to-fit=no, initial-scale=1, maximum-scale=1, user-scalable=no">
+        
+        <title>
+            {% block head_title %}
+            {% endblock head_title %} | XCM55
+        </title>
+        
+        <link rel="icon" type="image/png" sizes="64x64" href="{% static 'app/img/icon.png' %}">
+        {% include 'base_css.html' %}
+
+        <!-- Individual page style (if any)-->
+        {% block css %}{% endblock %}
+
+    </head>
+    <body>       
+        <header class="cover shadow-lg navbar">
+            <div class="container-fluid">
+                <div></div>
+                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+                </button>
+                {% include 'nav.html' %}
+            </div>
+            {% block cover %}
+            {% endblock cover %}
+        </header>
+        
+        {% block body %}
+        {% endblock body %}
+        <div class="notification">notification</div>
+    </body>
+    {% include 'base_js.html' %}
+</html>

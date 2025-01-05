@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+
+{% load static %}
+<html lang="ru">
+    <head>
+        <title>
+            {% block title %}
+            {% endblock title %} | XCM55
+        </title>
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="minimal-ui, width=device-width, shrink-to-fit=no, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <link rel="icon" type="image/png" sizes="64x64" href="{% static 'app/img/icon.png' %}">
+        {% include 'base_css.html' %}
+    </head>
+    <body class="container-fluid container-md">       
+        {% block content %}
+        {% endblock %}
+    </body>       
+    {% include 'base_js.html' %}
+</html>

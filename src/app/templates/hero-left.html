@@ -1,0 +1,26 @@
+{% load static %}
+    <div class="row flex-lg-row-reverse align-items-center gx-0 gy-5 g-md-5 py-5">
+        <div class="col-lg-6">
+            <img src="{% static image %}" class="d-block mx-lg-auto img-fluid rounded shadow-lg" width="700" height="500" loading="lazy">
+        </div>
+        <div class="col-lg-6">
+            <h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3">
+                {{ header }}
+            </h1>
+            <p class="lead">
+                {{ text }}
+            </p>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                {% if button_text and not button_hide %}
+                    <a href="{{ button_href }}" class="btn btn-success btn-lg px-4 me-md-2">
+                        {{ button_text }}
+                    </a>   
+                {% endif %}
+                {% if button_secondary_text and not button_secondary_hide %}
+                    <a href="{{ button_secondary_href }}" target="_blank" class="btn btn-outline-success btn-lg px-4 me-md-2">
+                        {{ button_secondary_text }}
+                    </a>   
+                {% endif %}
+            </div>
+        </div>
+    </div>

@@ -1,0 +1,52 @@
+html {
+  height: 100%;
+}
+
+body {
+  min-height: 100svh;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+h1 {
+  font-size: calc(1.325rem + .9vw);
+}
+
+h2 {
+  font-size: calc(1.3rem + .6vw);
+}
+
+p, h1, h2, h3, h4, h5, a, a:hover, .form-label, .form-check-label {
+  color: white;
+}
+
+.form-text {
+  color: rgb(177, 177, 177);
+}
+
+p, li {
+  list-style: none;
+}
+
+ul {
+  padding-left: 0;
+}
+
+.form-signin {
+  width: 100vh;
+  min-height: 100vh;
+  max-width: 500px;
+  padding: 15px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.7))
+}
+
+@media screen and (max-width: 550px){
+  .form-signin {
+    max-width: 310px;
+  }
+}
