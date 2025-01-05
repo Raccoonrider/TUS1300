@@ -1,0 +1,33 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "*"
+django-phonenumber-field = "*"
+django-debug-toolbar = "*"
+djangorestframework = "*"
+requests = "*"
+requests-oauthlib = "*"
+python3-openid = "*"
+pyjwt = "*"
+markdown = "*"
+phonenumbers = "*"
+iuliia = "*"
+psycopg2 = "*"
+gunicorn = "*"
+django-crispy-forms = "*"
+crispy-bootstrap5 = "*"
+pillow = "*"
+django-extensions = "*"
+django-allauth = "==0.61.1"
+pip = "*"
+pdfkit = "*"
+segno = "*"
+django-colorfield = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.11"

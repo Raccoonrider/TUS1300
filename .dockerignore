@@ -1,0 +1,9 @@
+# Ignore everything
+*
+
+!Pipfile
+!Pipfile.lock
+!crontab
+!src/
+
+**/local_settings.py
