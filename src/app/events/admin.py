@@ -29,7 +29,7 @@ class ResultModelAdmin(admin.ModelAdmin):
 class ApplicationModelAdmin(admin.ModelAdmin):
     model = Application
     search_fields = ('user_profile__last_name', 'user_profile__first_name')
-    list_display = ('user_profile', 'payment_confirmed', 'created')
+    list_display = ('user_profile', 'event', 'payment_confirmed', 'created')
     autocomplete_fields = ('user_profile', 'result')
     list_filter = ('event',)
 

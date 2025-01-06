@@ -41,10 +41,26 @@ class Event(BaseViewableModel):
         blank=True, 
         verbose_name="Ссылка ВК",
         )
-    rules_doc = models.FileField(
+    legend_doc = models.FileField(
         blank=True,
-        verbose_name="Регламент",
+        verbose_name="Легенда",
         upload_to="event_rules"
+    )
+    rules_txt = models.TextField(
+        blank=True,
+        verbose_name="Коротко о правилах"
+    )
+    rules_url = models.URLField(
+        blank=True,
+        verbose_name="Ссылка на правила"
+    )
+    qualification_txt = models.TextField(
+        blank=True,
+        verbose_name="Коротко о квалификации"
+    )
+    support_txt = models.TextField(
+        blank=True,
+        verbose_name="Коротко о поддержке"
     )
     finished = models.BooleanField(
         default=False,
@@ -102,18 +118,6 @@ class Event(BaseViewableModel):
     
     def get_results_url(self):
         return reverse('event_results', kwargs={'pk':self.pk})
-    
-    def application_url(self):
-        return reverse('application_create', kwargs={'pk':self.pk})
-    
-    def application_elite_url(self):
-        return reverse('application_create', kwargs={'pk':self.pk}) + "?category=elite"
-    
-    def application_halfmarathon_url(self):
-        return reverse('application_create', kwargs={'pk':self.pk}) + "?category=halfmarathon"
-    
-    def application_marathon_url(self):
-        return reverse('application_create', kwargs={'pk':self.pk}) + "?category=marathon"
     
     def application_url(self):
         return reverse('application_create', kwargs={'pk':self.pk})
@@ -196,6 +200,9 @@ class Application(BaseModel):
     class Meta:
         verbose_name = 'Заявка'
         verbose_name_plural = 'Заявки'
+
+    def __str__(self):
+        return f"Заявка {self.user_profile.render_name()}"
 
 class Result(BaseModel):
     event = models.ForeignKey(

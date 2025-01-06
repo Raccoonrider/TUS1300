@@ -32,6 +32,11 @@
     height: 1em;
 }
 
+.bi-bicycle {
+    width: 1.5em;
+    height: 1.5em;
+}
+
 .btn-primary{
     --bs-btn-color: #fff;
     --bs-btn-bg: #3C6D2C;
@@ -61,10 +66,63 @@
     --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
     --bs-btn-disabled-color:  #3C6D2C;
     --bs-btn-disabled-bg: transparent;
-    --bs-btn-disabled-border-color:  #3C6D2C;
+    --bs-btn-disabled-border-color:  #3c6d2c;
     --bs-gradient: none;
 }
 :root{
-    --bs-primary-rgb: 201, 84, 0;
+    --bs-primary-rgb: 60, 109, 4;
 }
 
+
+.parallax-container {
+    background-attachment: fixed;
+    background-position: center;
+    background-size: cover;
+    
+    min-height: 30vh;
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: end;
+    color: #FFF;
+}
+
+.buffer {
+    width: 100%;
+    min-height: 50vh;
+    background-color: white;
+  }
+
+@media only screen and (max-device-width: 1366px) {
+    .parallax-container {
+      background-attachment: scroll;
+    }
+  }
+
+
+.parallax-container h1{
+    padding: 10px min(20%, 192px);
+    width: 100%;
+    padding-top: 60px;
+    margin-bottom: 0;
+    text-align: center;
+    background-image: 
+    linear-gradient(to bottom, #00000000, #00000000, #00000030);
+  }
+
+.event-info-row div{
+    display:inline;
+}
+
+
+
+@media only screen and (max-device-width: 768px) {
+    .event-info-row div{
+        display: block;
+        margin-bottom: 15px;
+    }
+    .event-info-row .bi-dot{
+        display: none;
+    }
+}

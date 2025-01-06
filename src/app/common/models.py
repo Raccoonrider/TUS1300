@@ -4,9 +4,9 @@ from common.shortcuts import transliterate
 
 
 class BaseModel(models.Model):
-    created = models.DateTimeField(auto_now_add=True)
-    saved = models.DateTimeField(auto_now=True)
-    active = models.BooleanField(null=False, default=True)
+    created = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
+    saved = models.DateTimeField(auto_now=True, verbose_name="Дата сохранения")
+    active = models.BooleanField(null=False, default=True, verbose_name="Активен")
 
     class Meta:
         abstract = True

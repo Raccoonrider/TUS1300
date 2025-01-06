@@ -101,6 +101,9 @@ class UserProfile(BaseModel):
         if date_ < self.birthday:
             age -= 1
         return age
+    
+    def render_name(self):
+        return F"{self.last_name} {self.first_name}"
 
     class Meta:
         verbose_name = "Профиль пользователя"

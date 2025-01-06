@@ -1,0 +1,15 @@
+{% load static %}
+
+<style>       
+    .cover {
+        background-image: 
+        linear-gradient(to bottom, #00000000, #00000000, #00000080),
+        url("{% static 'app/img/tus/cover.webp' %}");
+        background-position: 50% 38%;
+        background-size:cover;
+
+    }
+</style>
+<h1 class="h-cover display-4 fw-bold lh-1 mb-3">
+    {{ event.name }}
+</h1>
