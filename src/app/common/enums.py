@@ -33,9 +33,3 @@ class ResultStatus(BaseEnum):
     OTL = 1
     DNF = 2
     DSQ = 3
-
-class Category(BaseEnum):
-    Default = 0
-    Elite = 1
-    Junior = 2
-    EliteW = 3

@@ -65,9 +65,7 @@ INSTALLED_APPS = [
 
     # Apps
     'users',
-    'sponsors',
     'events',
-    'pdf_generator',
 ]
 
 MIDDLEWARE = [
@@ -120,10 +118,10 @@ REST_FRAMEWORK = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'xcm55',
+        'NAME': os.environ['POSTGRES_DB'],
         'USER' : os.environ['POSTGRES_USER'],
         'PASSWORD' : os.environ['POSTGRES_PASSWORD'],
-        'HOST' : 'db',
+        'HOST' : 'localhost',
         'PORT' : '5432',
     }
 }
@@ -230,7 +228,7 @@ EMAIL_USE_SSL = True
 EMAIL_PORT = 465
 EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
 EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
-DEFAULT_FROM_EMAIL = f'Команда XCM55 <{EMAIL_HOST_USER}>'
+DEFAULT_FROM_EMAIL = f'Команда организаторов ТУС-1300 <{EMAIL_HOST_USER}>'
 
 # Security
 SESSION_COOKIE_SECURE = False

@@ -3,9 +3,16 @@ document.showNotification = function(message){
     notificationDom.innerText = message
     notificationDom.style.display = 'block'
     notificationDom.style.opacity = 1
-    setTimeout(()=>{notificationDom.style.opacity = 0}, 2500)
-    setTimeout(()=>{notificationDom.style.display = 'none'}, 2750)
+    document.hideNotification(2500)
 }
+
+document.hideNotification = function(timeout){
+    const notificationDom = document.querySelector('.notification')
+    setTimeout(()=>{notificationDom.style.opacity = 0}, timeout)
+    setTimeout(()=>{notificationDom.style.display = 'none'}, timeout + 250)
+}
+
+document.hideNotification(6000)
 
 // Phonenumber fix
 const phoneNumberField = document.querySelector('#id_phone_number')

@@ -6,10 +6,8 @@ from users.models import (
 
 from events.models import (
     Event,
-    Route,
     Application,
     Result,
-    AgeGroup,
 )
 
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -22,11 +20,6 @@ class EventSerializer(serializers.ModelSerializer):
         model = Event
         depth = 1
         exclude = ('sponsors',)
-
-class RouteSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Route
-        fields = "__all__"
 
 class ApplicationSerializer(serializers.ModelSerializer):
     user_profile = UserProfileSerializer
@@ -41,10 +34,3 @@ class ResultSerializer(serializers.ModelSerializer):
     class Meta:
         model = Result
         exclude = ("age_group",)
-
-class AgeGroupSerializer(serializers.ModelSerializer):
-    birthday_min = serializers.DateField()
-    birthday_max = serializers.DateField()
-    class Meta:
-        model = AgeGroup
-        fields = "__all__"

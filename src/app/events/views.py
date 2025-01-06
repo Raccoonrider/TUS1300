@@ -8,10 +8,9 @@ from django.conf import settings
 from django.urls import reverse
 from django.db.models import F
 
-from common.enums import ResultStatus, Category, Gender
-from events.models import Event, Application, PaymentWindow, AgeGroup, Result
+from common.enums import ResultStatus,Gender
+from events.models import Event, Application, Result
 from events.forms import ApplicationForm
-from sponsors.models import Referral
 
 class EventDetail(View):
     model = Event
@@ -39,51 +38,9 @@ class EventDetail(View):
 
         self.request.session['ref_uuid'] = self.request.GET.get('ref_uuid')
 
-        elites = (Application.objects
-            .filter(
-                event=event, 
-                category=Category.Elite,
-                payment_confirmed=True,
-                )
-            .order_by('user_profile__last_name')
-            )
-        route_marathon, route_halfmarathon = event.routes.all().order_by('-distance')
+        applications = Application.objects.filter(event=event).order_by('user_profile__last_name')
 
-        agegroups = AgeGroup.objects.filter(event=event).order_by('gender', 'age_max')
-        if agegroups:
-            amateurs_marathon = zip(agegroups, [
-                (Application.objects
-                    .filter(
-                        event=event, 
-                        category=Category.Default, 
-                        route=route_marathon,
-                        payment_confirmed=True,
-                        user_profile__birthday__gte=ag.birthday_min(),
-                        user_profile__birthday__lte=ag.birthday_max(),
-                        user_profile__gender=ag.gender,
-                    )
-                    .order_by('user_profile__last_name'))
-                for ag in agegroups]
-            )
-        else:     
-            amateurs_marathon = (Application.objects
-                .filter(
-                    event=event, 
-                    category=Category.Default, 
-                    route=route_marathon,
-                    payment_confirmed=True,
-                )
-                .order_by('user_profile__last_name')
-                )
-        amateurs_halfmarathon = (Application.objects
-            .filter(
-                event=event, 
-                category=Category.Default, 
-                route=route_halfmarathon,
-                payment_confirmed=True,
-            )
-            .order_by('user_profile__last_name')
-            )
+
 
         registration_disabled = (
             my_application is not None
@@ -91,32 +48,11 @@ class EventDetail(View):
             or event.registration_closed == True
         )
 
-        marathon_payment_windows = PaymentWindow.objects.filter(event=event, route=route_marathon)
-        marathon_payment_windows_stale = marathon_payment_windows.filter(active_until__lt=date.today())
-        marathon_payment_window_active = marathon_payment_windows.filter(active_until__gte=date.today()).first()
-        marathon_payment_windows_next = marathon_payment_windows.filter(active_until__gte=date.today())[1:]
-
-        halfmarathon_payment_windows = PaymentWindow.objects.filter(event=event, route=route_halfmarathon)
-        halfmarathon_payment_windows_stale = halfmarathon_payment_windows.filter(active_until__lt=date.today())
-        halfmarathon_payment_window_active = halfmarathon_payment_windows.filter(active_until__gte=date.today()).first()
-        halfmarathon_payment_windows_next = halfmarathon_payment_windows.filter(active_until__gte=date.today())[1:]
-
         context = {
             'event': event,
             'my_application': my_application,
+            'applications': applications,
             'registration_disabled': registration_disabled,
-            'elites': elites,
-            'agegroups': agegroups,
-            'amateurs_marathon': amateurs_marathon,
-            'amateurs_halfmarathon': amateurs_halfmarathon,
-            'marathon': route_marathon,
-            'halfmarathon': route_halfmarathon,
-            'marathon_payment_windows_stale' : marathon_payment_windows_stale,
-            'marathon_payment_window_active' : marathon_payment_window_active,
-            'marathon_payment_windows_next' : marathon_payment_windows_next,
-            'halfmarathon_payment_windows_stale' : halfmarathon_payment_windows_stale,
-            'halfmarathon_payment_window_active' : halfmarathon_payment_window_active,
-            'halfmarathon_payment_windows_next' : halfmarathon_payment_windows_next,
         }
         return render(request=self.request, template_name=event.detail_template, context=context)
     
@@ -128,13 +64,10 @@ class EventDetail(View):
                 .filter(event=event, user_profile=request.user.profile)
                 .first()
                 )
-            payment_windows = PaymentWindow.objects.filter(event=event, route=my_application.route)
-            payment_window_active = payment_windows.filter(active_until__gte=date.today()).first()
             
             context = {
                 'event': event,
                 'my_application': my_application,
-                'payment_window_active' : payment_window_active,
             }
             return render(request=request, template_name=event.hx_payment_template, context=context)
         else:

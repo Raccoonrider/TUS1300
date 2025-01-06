@@ -21,15 +21,6 @@ class EventListAPIView(ListAPIView, EventDetailAPIView):
     queryset = Event.objects.filter(active=True, finished=False).order_by('date')
 
 
-class AgeGroupListAPIView(ListAPIView):
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
-    serializer_class = AgeGroupSerializer
-
-    def get_queryset(self):        
-        return AgeGroup.objects.filter(event__pk=self.kwargs['event__pk'])
-
-
 class ApplicationListAPIView(ListAPIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]

@@ -21,6 +21,24 @@ class UserProfile(BaseModel):
         max_length=255, 
         verbose_name="Фамилия",
     )
+    first_name_en = models.CharField(
+        null=False, 
+        blank=False, 
+        max_length=255, 
+        verbose_name="Имя латиницей",
+        help_text="Ваше имя в системе ACP/LRM. "
+        "Лучше всего посмотреть его в протоколе LRM "
+        'или на сайте <a href="https://randonneur.me">с результатами LRM</a>',
+    )
+    last_name_en = models.CharField(
+        null=False, 
+        blank=False, 
+        max_length=255, 
+        verbose_name="Фамилия латиницей",
+        help_text="Ваша фамилия в системе ACP/LRM. "
+        "Лучше всего посмотреть её в протоколе LRM "
+        'или на сайте <a href="https://randonneur.me">с результатами LRM</a>',
+    )
     gender = models.IntegerField(
         null=False,
         blank=False,
@@ -32,22 +50,38 @@ class UserProfile(BaseModel):
         null=False,
         blank=False,
         verbose_name="Номер телефона",
-        help_text="Укажите номер телефона для связи с организаторами",
+        help_text="Укажите номер телефона для экстренной связи."
+        "Эта информация будет скрыта от других "
+        "пользователей и видна только организаторам.",
     )
     birthday = models.DateField(
         null=False,
         blank=False,
         verbose_name="Дата рождения",
-        help_text="Укажите точную дату рождения для определения "
-        "возрастной категории на момент старта. " 
-        "Ваша дата рождения будет скрыта от других пользователей "
-        "и не отобразится на странице результатов ",
+        help_text="Эта информация будет скрыта от других "
+        "пользователей и видна только организаторам.",
     )
     location = models.CharField(
         blank=True, 
         max_length=255, 
         verbose_name="Локация",
-        help_text="Откуда Вы?"
+        help_text="Откуда Вы? Эта информация будет "
+        "отображаться напротив Вашего имени в списке участников."
+    )
+    club = models.CharField(
+        blank=True, 
+        max_length=255, 
+        verbose_name="Домашний клуб",
+        help_text="С каким клубом Вы себя ассоциируете? "
+        "Эта информация будет отображаться напротив "
+        "Вашего имени в списке участников.",
+    )
+    address = models.TextField(
+        blank=False,
+        verbose_name="Домашний адрес",
+        help_text="Адрес для отправки дорожной карточки и медали. "
+        "Эта информация будет скрыта от других "
+        "пользователей и видна только организаторам.",
     )
     
     def __str__(self):
