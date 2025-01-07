@@ -9,7 +9,7 @@ from django.urls import reverse
 from django.db.models import F
 
 from common.enums import ResultStatus,Gender
-from events.models import Event, Application, Result
+from events.models import Event, Application, Result, Control
 
 class EventDetail(View):
     model = Event
@@ -28,16 +28,26 @@ class EventDetail(View):
                     .first()
                 )
         if self.request.user.is_authenticated and self.request.user.profile:
-            my_application = (Application.objects
-                .filter(event=event, user_profile=self.request.user.profile)
-                .first()
-                )
+            my_application = (
+                Application.objects
+                    .filter(event=event, user_profile=self.request.user.profile)
+                    .first()
+            )
+            my_result = (
+                Result.objects
+                    .filter(event=event, user_profile=self.request.user.profile)
+                    .first()
+            )
         else:
             my_application = None
+            my_result = None
 
+        controls = Control.objects.filter(event=event).order_by('distance')
+        
         self.request.session['ref_uuid'] = self.request.GET.get('ref_uuid')
 
         applications = Application.objects.filter(event=event).order_by('user_profile__last_name')
+        results = Result.objects.filter(event=event).order_by('user_profile__last_name')
 
         registration_disabled = (
             my_application is not None
@@ -47,8 +57,11 @@ class EventDetail(View):
 
         context = {
             'event': event,
-            'my_application': my_application,
             'applications': applications,
+            'my_application': my_application,
+            'results': results,
+            'my_result': my_result,
+            'controls': controls,
             'registration_disabled': registration_disabled,
         }
         return render(request=self.request, template_name=event.detail_template, context=context)

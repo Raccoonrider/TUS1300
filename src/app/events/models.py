@@ -1,3 +1,5 @@
+from datetime import date, time, datetime, timedelta
+
 from django.db import models
 from django.urls import reverse
 from django.conf import settings
@@ -87,21 +89,21 @@ class Event(BaseViewableModel):
     detail_template = models.CharField(
         null=False,
         blank=False,
-        default='events/detail.html',
+        default='events/tus/detail.html',
         max_length=127,
         verbose_name="Шаблон лэндинга",
     )
     results_template = models.CharField(
         null=False,
         blank=False,
-        default='events/results.html',
+        default='events/tus/results.html',
         max_length=127,
         verbose_name="Шаблон протокола",
     )
     hx_payment_template = models.CharField(
         null=False,
         blank=False,
-        default='events/hx_payment_info.html',
+        default='events/tus/hx_payment_info.html',
         max_length=127,
         verbose_name="Шаблон платежа",
     )
@@ -127,34 +129,40 @@ class Event(BaseViewableModel):
 
 
 class PaymentInfo(BaseModel):
-    payment_value = models.IntegerField(
+    amount = models.IntegerField(
         null=True,
         blank=True,
         verbose_name="Сумма к оплате"
     )
-    payment_info = models.CharField(
+    card_number = models.CharField(
         null=True,
         blank=True,
         max_length=255,
         verbose_name="Номер карты",
     )
-    payment_url = models.URLField(
+    card_name = models.CharField(
+        null=True,
+        blank=True,
+        max_length=255,
+        verbose_name="Имя держателя карты",
+    )
+    url = models.URLField(
         null=True,
         blank=True,
         verbose_name="URL для оплаты",
     )
-    payment_qr = models.ImageField(
+    qr = models.ImageField(
         null=True,
         blank=True,
         verbose_name="QR для оплаты",
         upload_to='events/payment_qr',
     )
-    payment_sbp_phone = PhoneNumberField(
+    sbp_phone = PhoneNumberField(
         null=True,
         blank=True,
         verbose_name="Телефон для оплаты по СБП",   
     )
-    payment_sbp_name = models.CharField(
+    sbp_name = models.CharField(
         null=True,
         blank=True,
         max_length=32,
@@ -164,6 +172,9 @@ class PaymentInfo(BaseModel):
     class Meta:
         verbose_name = 'Оплата'
         verbose_name_plural = 'Оплата'
+
+    def __str__(self):
+        return f"Данные для оплаты от {self.created}"
 
 class Application(BaseModel):
     event = models.ForeignKey(
@@ -212,6 +223,11 @@ class Result(BaseModel):
         blank=False,
         verbose_name="Событие",
     )
+    homologation = models.CharField(
+        blank=True,
+        max_length=32,
+        verbose_name="Омологация",
+    )
     number = models.IntegerField(
         null=True,
         blank=True,
@@ -259,4 +275,95 @@ class Result(BaseModel):
         return "-"
 
     def __str__(self):
-        return F"{self.number} | {self.render_time()}"
+        return F"{self.user_profile} | {self.render_time()}"
+
+
+class Control(BaseModel):
+    event = models.ForeignKey(
+        to=Event,
+        on_delete=models.CASCADE,
+        null=False,
+        blank=False,
+        verbose_name="Событие",
+    )
+    distance = models.IntegerField(
+        null=False,
+        verbose_name="Расстояние от старта"
+    )
+    name = models.CharField(
+        max_length=200, 
+        verbose_name="Название",
+        ) 
+    description = models.TextField(
+        blank=True, 
+        verbose_name='Описание',
+        )
+    
+    @property
+    def datetime_open(self) -> datetime:
+        return datetime.combine(self.event.date, self.event.time) + self.timedelta_open
+        
+    @property
+    def datetime_close(self) -> datetime:
+        return datetime.combine(self.event.date, self.event.time) + self.timedelta_close
+    
+    @property
+    def timedelta_open(self) -> timedelta:
+        return timedelta(hours=self.distance / 30)
+    
+    @property
+    def timedelta_close(self) -> timedelta:
+        if self.event.distance in range(0, 1300):
+            return timedelta(hours=self.distance / 13.3333)
+        if self.event.distance in range(1300, 1900):
+            return timedelta(hours=self.distance / 12)
+        if self.event.distance in range(1900, 2500):
+            return timedelta(hours=self.distance / 10)
+        if self.event.distance >= 2500:
+            return timedelta(hours=self.distance / 8.3333)
+        
+    @property
+    def distance_delta(self) -> int:
+        prev = Control.objects.filter(
+            event=self.event,
+            distance__lt=self.distance,
+        ).order_by('-distance').first()
+
+        if prev:
+            return self.distance - prev.distance
+        return 0
+        
+    def render_timedelta(self, td:timedelta):
+        m = int(td.total_seconds() // 60)
+        h, m = divmod(m, 60)
+        d, h = divmod(h, 24)
+
+        if d:
+            return f"{d}д {h:02d}ч {m:02d}мин"
+        return f"{h:02d}ч {m:02d}мин"
+    
+    def render_timedelta_open(self):
+        return self.render_timedelta(self.timedelta_open)
+    
+    def render_timedelta_close(self):
+        return self.render_timedelta(self.timedelta_close)
+    
+    def render_datetime(self, dt:datetime):
+        d = dt.day - self.event.date.day
+
+        if d:
+            return f"{dt.hour:02d}:{dt.minute:02d} (+{d})"
+        return f"{dt.hour:02d}:{dt.minute:02d}"
+    
+    def render_datetime_open(self):
+        return self.render_datetime(self.datetime_open)
+    
+    def render_datetime_close(self):
+        return self.render_datetime(self.datetime_close)    
+
+    class Meta:
+        verbose_name = 'КП'
+        verbose_name_plural = 'КП'
+
+    def __str__(self):
+        return f"КП {self.distance} {self.event}"

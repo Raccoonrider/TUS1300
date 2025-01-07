@@ -1,5 +1,6 @@
 from django.contrib import admin
 
+from common.admin import ChainedPrepopulatedFieldsMixin
 from events.models import *
 
 class BaseModelAdmin(admin.ModelAdmin):
@@ -32,6 +33,15 @@ class ApplicationModelAdmin(admin.ModelAdmin):
     list_display = ('user_profile', 'event', 'payment_confirmed', 'created')
     autocomplete_fields = ('user_profile', 'result')
     list_filter = ('event',)
+
+@admin.register(Control)
+class ControlModelAdmin(ChainedPrepopulatedFieldsMixin, admin.ModelAdmin):
+    model = Control
+    list_display = ('name', 'event', 'distance', 'render_timedelta_close', 'render_datetime_close',)
+    list_filter = ('event', )
+    autocomplete_fields = ('event', )
+    ordering = ('-event__date', 'distance')
+    chained_prepopulated_fields = ('event',)
 
 @admin.register(PaymentInfo)
 class PaymentInfoModelAdmin(admin.ModelAdmin):

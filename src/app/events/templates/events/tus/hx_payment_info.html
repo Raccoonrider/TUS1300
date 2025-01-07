@@ -1,29 +1,66 @@
 {% load static %}
 
-<div class="alert alert-primary m-4">
+<div class="alert alert-primary my-4">
     <h4 class="mb-4">
-        Ваша заявка успешно зарегистрирована. Актуальная стоимость участия - <strong>{{ payment_window_active.render_price }}</strong>.
+        Ваша заявка успешно зарегистрирована.
     </h4>
-    <p>
-        Оплату можно произвести по <a href="{{ event.payment_url }}">ссылке</a> (Т-Банк) 
-        или через СБП по номеру телефона <button class="btn btn-light" id="sbp-button">{{ event.payment_sbp_phone}}</button> {{ event.payment_sbp_name }}
-    </p>
+
+    {% if event.payment.amount %}
+    <p>Стоимость участия - <strong>{{event.payment.amount}}</strong> р.</p>
+    <p>Доступные способы оплаты:</p>
+    <ul>
+        {% if event.payment.card_number %}
+        <li>
+            Переводом на банковскую карту <button class="btn btn-light m-1" id="card-button">{{event.payment.card_number}}</button> {{event.payment.card_name}}
+            <script>
+                let cardButton = document.querySelector("#card-button")
+                cardButton.addEventListener('click', function(e) {
+                    navigator.clipboard.writeText(spbButton.innerText).then(
+                        () => {document.showNotification("Скопировано в буфер обмена")},
+                        () => {document.showNotification("Невозможно скопировать в буфер обмена")}
+                    )
+                })
+            </script>
+        </li>
+        {% endif %}
+        {% if event.payment.sbp_phone %}
+        <li>
+            Переводом через СБП по номеру телефона <button class="btn btn-light m-1" id="sbp-button">{{event.payment.sbp_phone}}</button> {{event.payment.sbp_name}}
+            <script>
+                let spbButton = document.querySelector("#sbp-button")
+                spbButton.addEventListener('click', function(e) {
+                    navigator.clipboard.writeText(spbButton.innerText).then(
+                        () => {document.showNotification("Скопировано в буфер обмена")},
+                        () => {document.showNotification("Невозможно скопировать в буфер обмена")}
+                    )
+                })
+            </script>
+        </li>
+        {% endif %}
+        {% if event.payment.url %}
+        <li>
+            По <a href="{{event.payment.url}}">ссылке</a>
+        </li>
+        {% endif %}
+        {% if event.payment.qr %}
+        <li>
+            <p>
+                По QR-коду:
+            </p>
+            <img src="{{event.payment.qr.url}}">
+        </li>
+        {% endif %}
+
+    </ul>
     <p>
         Пожалуйста, не забудьте указать Вашу фамилию в комментарии к платежу.               
     </p>
+    {% else %}
     <p>
-        Обращаем Ваше внимание на то, что оплата на старте мероприятия <strong>не предусмотрена</strong>. 
+        Стоимость участия и способы оплаты еще не определены. Следите за новостями!
     </p>
+    {% endif %}
 </div>
 
-<script>
-    let spbButton = document.querySelector("#sbp-button")
-    spbButton.addEventListener('click', function(e) {
-        navigator.clipboard.writeText(spbButton.innerText).then(
-            () => {document.showNotification("Скопировано в буфер обмена")},
-            () => {document.showNotification("Невозможно скопировать в буфер обмена")}
-        )
-    })
 
-</script>
 
