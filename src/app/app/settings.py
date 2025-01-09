@@ -118,7 +118,7 @@ REST_FRAMEWORK = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ['POSTGRES_DB'],
+        'NAME': os.environ['TUS_POSTGRES_DB'],
         'USER' : os.environ['POSTGRES_USER'],
         'PASSWORD' : os.environ['POSTGRES_PASSWORD'],
         'HOST' : 'localhost',
@@ -226,8 +226,8 @@ EMAIL_HOST = 'smtp.mail.ru'
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
 EMAIL_PORT = 465
-EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
-EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
+EMAIL_HOST_USER = os.environ['TUS_EMAIL_HOST_USER']
+EMAIL_HOST_PASSWORD = os.environ['TUS_EMAIL_HOST_PASSWORD']
 DEFAULT_FROM_EMAIL = f'Команда организаторов ТУС-1300 <{EMAIL_HOST_USER}>'
 
 # Security
