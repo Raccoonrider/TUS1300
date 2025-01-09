@@ -25,7 +25,7 @@ SECRET_KEY = os.environ['DJANGO_SECRET']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['xcm55.ru', 'localhost']
+ALLOWED_HOSTS = ['tus1300.ru', 'localhost']
 SITE_ID = 1
 
 
@@ -236,7 +236,7 @@ SECURE_SSL_REDIRECT = False
 CSRF_COOKIE_SECURE = False
 # CSRF_FAILURE_VIEW = 'app.views.csrf_failure'
 CSRF_TRUSTED_ORIGINS = ['http://localhost',
-                        'https://xcm55.ru']
+                        'https://tus1300.ru']
 try: 
     from .local_settings import *
 except ImportError:
