@@ -99,6 +99,12 @@
                         Скачать легенду
                     </a>   
                 {% endif %}
+                {% if event.garmin_connect_url %}
+                    <a href="{{ event.garmin_connect_url }}"  class="me-md-2">
+                        <img src="https://static.garmincdn.com/com.garmin.connect/content/images/developer/gc-app-tile/xxxhdpi/gc-app-tile_@480.png" height="48" width="48">
+                    </a>   
+                {% endif %}
+
             </div>
         </div>
     </div>

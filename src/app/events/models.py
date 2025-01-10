@@ -25,7 +25,10 @@ class Event(BaseViewableModel):
         blank=True, 
         verbose_name="Трек *.gpx",
         )
-
+    garmin_connect_url = models.URLField(
+        blank=True,
+        verbose_name="Garmin Connect URL"
+    )
     date = models.DateField(
         null=False,
         verbose_name="Дата",
