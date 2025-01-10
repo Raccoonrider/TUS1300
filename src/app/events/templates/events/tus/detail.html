@@ -163,8 +163,9 @@
                 <th></th>
                 <th>КП</th>
                 <th>От старта</th>
+                <th>До финиша</th>
                 <th>Между КП</th>
-                <th>Время закрытия</th>
+                <th>Закрытие</th>
             </tr>
         </thead>
         <tbody>
@@ -180,6 +181,9 @@
                         {{control.distance}} км
                     </td>
                     <td>
+                        {{control.distance_to_go}} км
+                    </td>
+                    <td>
                         {{control.distance_delta}} км
                     </td>
                     <td>
@@ -189,22 +193,31 @@
             {% endfor %}
         </tbody>
     </table>
-    <table class="table table-striped table-hover mt-5 d-md-none">
+    <table class="table table-sm table-hover mt-5 d-md-none">
         <thead>
             <tr>
-                <th>КП</th>
-                <th>От старта</th>
-                <th>Время закрытия</th>
+                <th class="text-muted fw-normal fs-6">От старта</th>
+                <th class="text-muted fw-normal fs-6">До финиша</th>
+                <th class="text-muted fw-normal fs-6">Между КП</th>
+                <th class="text-muted fw-normal fs-6">Закрытие</th>
             </tr>
         </thead>
         <tbody>
             {% for control in controls %}
-                <tr>
-                    <td>
+                <tr >
+                    <td class="fw-semibold" colspan="4">
                         КП{{ forloop.counter }} {{control.name}}
                     </td>
+                </tr>
+                <tr>
                     <td>
                         {{control.distance}} км
+                    </td>
+                    <td>
+                        {{control.distance_to_go}} км
+                    </td>
+                    <td>
+                        {{control.distance_delta}} км
                     </td>
                     <td>
                         {{control.render_datetime_close}}

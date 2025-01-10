@@ -350,7 +350,11 @@ class Control(BaseModel):
 
         if prev:
             return self.distance - prev.distance
-        return 0
+        return self.distance
+    
+    @property
+    def distance_to_go(self) -> int:
+        return self.event.distance - self.distance
         
     def render_timedelta(self, td:timedelta):
         m = int(td.total_seconds() // 60)

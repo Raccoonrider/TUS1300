@@ -92,6 +92,7 @@
     width: 100%;
     min-height: 50vh;
     background-color: white;
+    margin-bottom: 1.5rem;
   }
 
 @media only screen and (max-device-width: 1366px) {
