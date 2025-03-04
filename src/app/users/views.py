@@ -1,8 +1,11 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic.edit import FormView
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
 
 from users.forms import *
 
+@method_decorator(login_required, name="dispatch")
 class UserProfileCreateUpdate(FormView):
     template_name = "users/user_profile.html"
     form_class = UserProfileForm
