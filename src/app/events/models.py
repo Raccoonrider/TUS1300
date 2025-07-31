@@ -4,7 +4,6 @@ from django.db import models
 from django.urls import reverse
 from django.conf import settings
 from phonenumber_field.modelfields import PhoneNumberField
-from segno import make_qr
 
 from common.models import BaseViewableModel, BaseModel
 from common.enums import ResultStatus
@@ -82,6 +81,11 @@ class Event(BaseViewableModel):
         verbose_name="Номер телефона для экстренной связи",
         help_text="Для печати на номерах",
     )
+    result_url = models.URLField(
+        blank=True,
+        default="",
+        verbose_name="Ссылка на протокол",
+    )
     result_qr = models.ImageField(
         null=True,
         blank=True,
@@ -95,13 +99,6 @@ class Event(BaseViewableModel):
         default='events/tus/detail.html',
         max_length=127,
         verbose_name="Шаблон лэндинга",
-    )
-    results_template = models.CharField(
-        null=False,
-        blank=False,
-        default='events/tus/results.html',
-        max_length=127,
-        verbose_name="Шаблон протокола",
     )
     hx_payment_template = models.CharField(
         null=False,
