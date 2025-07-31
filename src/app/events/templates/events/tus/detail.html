@@ -17,6 +17,9 @@
     .plx-3{
         background-image: url("{% static 'app/img/tus/3.webp' %}");
     }
+    .plx-4{
+        background-image: url("{% static 'app/img/tus/4.webp' %}");
+    }
     .plx-extra1{
         background-image: url("{% static 'app/img/tus/extra1.webp' %}");
     }
@@ -107,6 +110,17 @@
                         Скачать легенду
                     </a>   
                 {% endif %}
+                {% if event.garmin_connect_url %}
+                    <style>
+                        .garmin-icon:hover{
+                            opacity: 0.9;
+                        }
+                    </style>
+                    <a href="{{ event.garmin_connect_url }}" class="me-md-2 garmin-icon">
+                        <img src="https://static.garmincdn.com/com.garmin.connect/content/images/developer/gc-app-tile/xxxhdpi/gc-app-tile_@480.png" height="48" width="48">
+                    </a>   
+                {% endif %}
+
             </div>
         </div>
     </div>
@@ -232,8 +246,9 @@
                 <th></th>
                 <th>КП</th>
                 <th>От старта</th>
+                <th>До финиша</th>
                 <th>Между КП</th>
-                <th>Время закрытия</th>
+                <th>Закрытие</th>
             </tr>
         </thead>
         <tbody>
@@ -249,6 +264,9 @@
                         {{control.distance}} км
                     </td>
                     <td>
+                        {{control.distance_to_go}} км
+                    </td>
+                    <td>
                         {{control.distance_delta}} км
                     </td>
                     <td>
@@ -258,22 +276,31 @@
             {% endfor %}
         </tbody>
     </table>
-    <table class="table table-striped table-hover mt-5 d-md-none">
+    <table class="table table-sm table-hover mt-5 d-md-none">
         <thead>
             <tr>
-                <th>КП</th>
-                <th>От старта</th>
-                <th>Время закрытия</th>
+                <th class="text-muted fw-normal fs-6">От старта</th>
+                <th class="text-muted fw-normal fs-6">До финиша</th>
+                <th class="text-muted fw-normal fs-6">Между КП</th>
+                <th class="text-muted fw-normal fs-6">Закрытие</th>
             </tr>
         </thead>
         <tbody>
             {% for control in controls %}
-                <tr>
-                    <td>
+                <tr >
+                    <td class="fw-semibold" colspan="4">
                         КП{{ forloop.counter }} {{control.name}}
                     </td>
+                </tr>
+                <tr>
                     <td>
                         {{control.distance}} км
+                    </td>
+                    <td>
+                        {{control.distance_to_go}} км
+                    </td>
+                    <td>
+                        {{control.distance_delta}} км
                     </td>
                     <td>
                         {{control.render_datetime_close}}
@@ -357,6 +384,46 @@
 
     
 <div class="text-light bg-primary shadow-lg">  
+
+<section class="parallax-container plx-4">
+    <h1 class="display-4 fw-bold lh-1" id="orgs"> 
+        Организатор бревета
+    </h1>
+</section>
+<section class="buffer container-md my-4">
+    {% if event.org %}
+    <div class="text-center ">
+        <a href="{{ event.org.url}}" class="text-decoration-none link-dark">
+            <img class="d-block mx-auto" src="{{ event.org.image.url}}" height="200"> 
+            <h2 class="fw-bold">
+                {{ event.org.name }}
+            </h2>
+            {{ event.org.brief|linebreaks }}
+        </a>
+    </div>
+    {% endif %}
+    {% if event.support_orgs.all %}
+    <hr class="w-50 mx-auto">
+    <h2 class="fw-bold lh-1 m-4 text-center"> 
+        При поддержке
+    </h2>
+    <div class="row flex-sm-row align-items-center gx-0 gy-5 g-sm-5 py-5">  
+        {% for org in event.get_support_orgs %}
+        <div class="col-sm-4 text-center">
+            <a href="{{ org.url}}" class="text-decoration-none link-dark">
+                <img class="d-block mx-auto" src="{{ org.image.url}}" height="150"> 
+                <h3 class="fw-bold text-decoration-none">
+                    {{ org.name }}
+                </h3>
+                {{ org.brief|linebreaks }}
+            </a>
+        </div>
+        {% endfor %}
+    </div>    
+    {% endif %}
+</section>
+
+<section class="text-light bg-primary shadow-lg">  
     <div class="container-md py-5 mx-auto">
         <h1 class="display-5 fw-bold lh-1 mb-4 text-center">
             Контакты
@@ -390,7 +457,7 @@
             </div>
         </div>
     </div>
-</div>
+</section>
 
 
 {% endblock body %}

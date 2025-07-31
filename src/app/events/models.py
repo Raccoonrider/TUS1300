@@ -25,7 +25,10 @@ class Event(BaseViewableModel):
         blank=True, 
         verbose_name="Трек *.gpx",
         )
-
+    garmin_connect_url = models.URLField(
+        blank=True,
+        verbose_name="Garmin Connect URL"
+    )
     date = models.DateField(
         null=False,
         verbose_name="Дата",
@@ -107,6 +110,18 @@ class Event(BaseViewableModel):
         max_length=127,
         verbose_name="Шаблон платежа",
     )
+    org = models.ForeignKey(
+        to='SupportOrg',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=False,
+        verbose_name="Организатор",
+        related_name='org_of',
+    )
+    support_orgs = models.ManyToManyField(
+        to='SupportOrg',
+        through='EventSupportOrg',
+    )
 
     class Meta:
         verbose_name = "Событие"
@@ -120,6 +135,10 @@ class Event(BaseViewableModel):
     
     def application_url(self):
         return reverse('application_create', kwargs={'pk':self.pk})
+    
+    def get_support_orgs(self):
+        relations = EventSupportOrg.objects.filter(event=self).order_by('priority')
+        return [x.support_org for x in relations]
     
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
@@ -328,7 +347,11 @@ class Control(BaseModel):
 
         if prev:
             return self.distance - prev.distance
-        return 0
+        return self.distance
+    
+    @property
+    def distance_to_go(self) -> int:
+        return self.event.distance - self.distance
         
     def render_timedelta(self, td:timedelta):
         m = int(td.total_seconds() // 60)
@@ -364,3 +387,37 @@ class Control(BaseModel):
 
     def __str__(self):
         return f"КП {self.distance} {self.event}"
+    
+class SupportOrg(BaseViewableModel):
+    url = models.URLField()
+
+    class Meta:
+        verbose_name = 'Организация'
+        verbose_name_plural = 'Организации'
+
+
+class EventSupportOrg(models.Model):
+    event = models.ForeignKey(
+        to=Event,
+        on_delete=models.CASCADE,
+        null=False,
+        blank=False,
+        verbose_name="Событие",
+    )
+    support_org = models.ForeignKey(
+        to=SupportOrg,
+        on_delete=models.CASCADE,
+        null=False,
+        blank=False,
+        verbose_name="Организация",
+    )
+    priority = models.IntegerField(
+        verbose_name="Приоритет",
+        default=1,
+        null=False,
+    )
+
+    class Meta:
+        verbose_name = 'Организация - Событие'
+        verbose_name_plural = 'Организации - События'
+        ordering = ('priority','pk')

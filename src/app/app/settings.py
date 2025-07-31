@@ -121,7 +121,7 @@ DATABASES = {
         'NAME': os.environ['TUS_POSTGRES_DB'],
         'USER' : os.environ['POSTGRES_USER'],
         'PASSWORD' : os.environ['POSTGRES_PASSWORD'],
-        'HOST' : 'localhost',
+        'HOST' : 'db',
         'PORT' : '5432',
     }
 }
@@ -155,6 +155,7 @@ ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS=7
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
 ACCOUNT_LOGIN_ON_PASSWORD_RESET = True
+ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'https'
 
 # Allauth provider specific settings
 SOCIALACCOUNT_PROVIDERS = {

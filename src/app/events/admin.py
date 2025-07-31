@@ -47,3 +47,17 @@ class ControlModelAdmin(ChainedPrepopulatedFieldsMixin, admin.ModelAdmin):
 class PaymentInfoModelAdmin(admin.ModelAdmin):
     model = PaymentInfo
 
+@admin.register(SupportOrg)
+class SupportOrgAdmin(admin.ModelAdmin):
+    prepopulated_fields = {"slug": ["name"]}
+    model = SupportOrg
+    search_fields = ('name', )
+    list_display = ('name', 'brief')
+    ordering = ('name',)
+
+@admin.register(EventSupportOrg)
+class EventSupportOrgModelAdmin(admin.ModelAdmin):
+    model = EventSupportOrg
+    list_display = ('support_org', 'event', 'priority')
+    ordering = ('-event__date',)
+    autocomplete_fields = ('support_org',)
