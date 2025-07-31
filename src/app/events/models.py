@@ -261,8 +261,8 @@ class Result(BaseModel):
             h, t = divmod(t, 3600)
             m, s = divmod(t, 60)
 
-            return F"{h:02d}:{m:02d}:{s:02d} {self.render_status()}" 
-        return f"--:--:-- {self.render_status()}"
+            return F"{h:d}:{m:02d} {self.render_status()}" 
+        return f"--:-- {self.render_status()}"
     
     def render_status(self):
         if self.status == ResultStatus.OK:
