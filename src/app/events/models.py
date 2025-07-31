@@ -118,9 +118,6 @@ class Event(BaseViewableModel):
     def get_absolute_url(self):
         return reverse('event_detail', kwargs={'pk':self.pk})
     
-    def get_results_url(self):
-        return reverse('event_results', kwargs={'pk':self.pk})
-    
     def application_url(self):
         return reverse('application_create', kwargs={'pk':self.pk})
     
